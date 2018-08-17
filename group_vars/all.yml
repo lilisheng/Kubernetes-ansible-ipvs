@@ -1,0 +1,111 @@
+# PASSWD: zhangguanzhang
+ansible_ssh_port: 22
+ansible_ssh_pass: zhangguanzhang
+
+TOKEN: 'LTbH+UgHnwAISplYVZG/JLuVqTSvztjkgKWcSBA1H5E='
+TOKEN_ID: 8b0217
+TOKEN_SECRET: 1ae7eb487aaeb131
+VIP: '192.168.126.110'
+INTERFACE_NAME: ens33
+NETMASK: '24'
+Net_Choose: calico
+INGRESS_VIP: 192.168.126.109
+local_domain: k8s.local
+cluster_domain_name: cluster.local
+cgroup_driver: cgroupfs
+
+API_SERVER_PORT: 6443
+HA_APISER_PORT: 5443
+#KUBE_APISERVER: "https://{{ VIP }}:6443"
+ServiceClusterIPRange: '10.96.0.0/12'
+KubernetesClusterIP: '10.96.0.1'
+ClusterDns: '10.96.0.10'
+ServiceNodePortRange: 30000-32767
+ETCD_PORT: '2379'
+ETCD_PEER_PORT: '2380'
+ClusterCidr: '10.244.0.0/16'
+
+# AutoSsh: /usr/local/bin/AutoSsh
+# AutoScp: /usr/local/bin/AutoScp
+
+kubelet_path: /usr/local/bin
+kubectl_path: /usr/local/bin
+kubernetes_path: /etc/kubernetes
+kubernetes_pki: "{{ kubernetes_path }}/pki"
+Manifests_path: "{{ kubernetes_path }}/manifests"
+
+kubelete_data_path: /var/lib/kubelet
+kubernetes_log: /var/log/kubernetes
+ca_certs_path: /etc/ssl/certs
+
+haproxy_path: /etc/haproxy
+
+cni_path: /opt/cni/bin
+cni_tar: cni-plugins-amd64-v0.7.1.tgz
+calicoctl_path: /usr/local/bin
+
+cfssl_path: /usr/local/bin
+cfssl_file: cfssl_linux-amd64
+cfssljson_file: cfssljson_linux-amd64
+
+ca_config_json: ca-config.json
+ca: ca
+ca_csr_json: ca-csr.json
+
+
+etcd_path: /etc/etcd
+etcd_ssl_path: "{{ etcd_path }}/ssl"
+etcd_data_path: /var/lib/etcd
+coredns_etcd: /var/lib/coredns-etcd
+etcd_ca_csr_json: etcd-ca-csr.json
+etcd_ca: etcd-ca
+etcd_csr_json: etcd-csr.json
+
+apiserver_csr_json: apiserver-csr.json
+front_proxy_ca_csr_json: front-proxy-ca-csr.json
+front_proxy_ca: front-proxy-ca
+front_proxy_client_csr_json: front-proxy-client-csr.json
+admin_csr_json: admin-csr.json
+manager_csr_json: manager-csr.json
+scheduler_csr_json: scheduler-csr.json
+
+kubelet_csr_json: kubelet-csr.json
+
+audit_policy_yml: audit-policy.yml
+encryption_yml: encryption.yml
+
+arch: amd64
+pause_img_version: 3.1
+
+pause_img: registry.cn-hangzhou.aliyuncs.com/google_containers/pause-{{ arch }}:{{ pause_img_version }}
+
+etcd_img_version: v3.3.9
+# don't change this version
+single_etcd_version: v3.1.9
+k8s_img_version: v1.11.1
+flannel_img_version: "v0.10.0-{{ arch }}"
+coredns_img_version: 1.2.0
+metric_img_version: v0.2.1
+dashboard_img_sersion: v1.8.3
+calico_img_version: v3.1.3
+
+nginx_ingress_version: 0.17.0
+
+prometheus_Alertmanager_version: v0.15.0
+grafana_admin_user: admin233
+grafana_admin_pass: cjAwdG1l
+grafana_img_version: 5.1.0
+
+kube_rbac_proxy_version: v0.3.1
+kube_state_metrics_version: v1.3.1
+addon_resizer_version: 1.0
+node_exporter_version: v0.15.2
+
+prometheus_operator_version: v0.22.0
+configmap_reload_version: v0.0.1
+prometheus_config_reloader_version: v0.22.0
+prometheus_img_version: v2.3.1
+
+elasticsearch_img_version: v6.2.5
+fluentd_img_version: v2.2.0
+kibana_oss_version: 6.2.4

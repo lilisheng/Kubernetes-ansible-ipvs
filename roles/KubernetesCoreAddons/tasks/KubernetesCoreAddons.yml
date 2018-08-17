@@ -1,0 +1,44 @@
+-  file:
+    path: "{{ kubernetes_path }}/CoreAddons"
+    state: directory
+
+- name: 渲染kube-proxy,coredns,metrics-server文件模板
+  template: src={{ item }} dest={{ kubernetes_path }}/CoreAddons/{{ item.split('.')[:-1]|join('.') }}
+  with_items:
+    - 'kube-proxy.yml.conf.j2'
+    - 'coredns.yml.conf.j2'
+    - 'metrics-server.yml.conf.j2'
+    
+
+- name: 渲染flannel文件模板
+  template: src={{ item }} dest={{ kubernetes_path }}/CoreAddons/{{ item.split('.')[:-1]|join('.') }}
+  with_items:
+    - 'kube-flannel.yml.conf.j2'
+  when: Net_Choose is defined and Net_Choose == 'flannel'
+
+- file:
+    path: "{{ kubernetes_path }}/CoreAddons/calico"
+    state: directory
+  when: Net_Choose is defined and Net_Choose != 'flannel'
+- name: 渲染calico文件模板
+  template:
+    src: "{{ item }}"
+    dest: "{{ kubernetes_path }}/CoreAddons/calico/{{ item.split('/')[-1].split('.')[:-1]|join('.') }}"
+  with_fileglob:
+    - templates/calico/*
+  when: Net_Choose is defined and Net_Choose != 'flannel'
+
+
+- name: 建立Kube-proxy  CoreDNS (calico or flannel)
+  shell: |
+    :;{{ kubectl_path }}/kubectl apply -f CoreAddons/kube-proxy.yml.conf;sleep 6;
+    {{ kubectl_path }}/kubectl apply -f CoreAddons/coredns.yml.conf;
+    {{ kubectl_path }}/kubectl apply -f CoreAddons/{% if Net_Choose == 'flannel' %}kube-flannel.yml.conf{% else %}calico{% endif %};sleep 6;
+    {{ kubectl_path }}/kubectl apply -f CoreAddons/metrics-server.yml.conf;sleep 1;
+  args:
+    chdir: "{{ kubernetes_path }}"
+
+
+
+
+

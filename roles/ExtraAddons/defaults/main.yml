@@ -1,0 +1,134 @@
+addons:
+  dashboard:
+    name: kubernetes-dashboard
+    dirs:
+      - dashboard
+    files:
+      - dashboard/getToken.sh
+    templates:
+      - dashboard/dashboard-rbac.yml
+      - dashboard/dashboard.yml
+      - dashboard/dashboard-sa.yml
+  ingress_nginx:
+    name: ingress-nginx
+    dirs:
+      - ingress-nginx
+    dependencies:
+      - name: ingress-nginx
+        kind: ns
+        files:
+          - ingress-nginx/ingress-controller-ns.yml
+    templates:
+      - ingress-nginx/ingress-controller-sa.yml
+      - ingress-nginx/ingress-controller-cm.yml
+      - ingress-nginx/ingress-controller-rbac.yml
+      - ingress-nginx/ingress-controller-svc.yml
+      - ingress-nginx/ingress-controller-dp.yml
+  external_dns:
+    name: external-dns
+    dirs:
+      - external-dns/coredns
+      - external-dns/external-dns
+    dependencies:
+      - name: external-dns
+        kind: ns
+        files:
+          - external-dns/external-dns-ns.yml
+      - name: coredns-etcd
+        kind: pod
+        namespace: external-dns
+        files:
+          - external-dns/coredns/coredns-cm.yml
+          - external-dns/coredns/coredns-dp.yml
+          - external-dns/coredns/coredns-svc.yml
+          - external-dns/coredns/etcd-dp.yml
+          - external-dns/coredns/etcd-svc.yml
+    templates:
+      - external-dns/external-dns/external-dns-rbac.yml
+      - external-dns/external-dns/external-dns-sa.yml
+      - external-dns/external-dns/external-dns.yml
+  logging:
+    name: kube-logging
+    dirs:
+      - logging/es
+      - logging/kibana
+      - logging/fluentd
+    dependencies:
+      - name: logging
+        kind: ns
+        files:
+          - logging/logging-ns.yml
+    templates:
+      - logging/es/elasticsearch-sa.yml
+      - logging/es/elasticsearch-rbac.yml
+      - logging/es/elasticsearch-svc.yml
+      - logging/es/elasticsearch-sts.yml
+      - logging/kibana/kibana-svc.yml
+      - logging/kibana/kibana-dp.yml
+      - logging/fluentd/fluentd-sa.yml
+      - logging/fluentd/fluentd-rbac.yml
+      - logging/fluentd/fluentd-es-cm.yml
+      - logging/fluentd/fluentd-es-ds.yml
+  monitoring:
+    name: prometheus-monitoring
+    dirs:
+      - monitoring/operator
+      - monitoring/alertmanater
+      - monitoring/node-exporter
+      - monitoring/kube-state-metrics
+      - monitoring/grafana
+      - monitoring/service-discovery
+      - monitoring/prometheus
+      - monitoring/servicemonitor
+    dependencies:
+      - name: monitoring
+        kind: ns
+        files:
+          - monitoring/monitoring-ns.yml
+      - name: prometheus-operator
+        kind: pod
+        namespace: monitoring
+        files:
+          - monitoring/operator/operator-sa.yml
+          - monitoring/operator/operator-rbac.yml
+          - monitoring/operator/operator-svc.yml
+          - monitoring/operator/operator-dp.yml
+    files:
+      - monitoring/grafana/grafana-definitions.yml
+      - monitoring/prometheus/prometheus-rules.yml
+    templates:
+      - monitoring/node-exporter/node-exporter-sa.yml
+      - monitoring/node-exporter/node-exporter-rbac.yml
+      - monitoring/node-exporter/node-exporter-svc.yml
+      - monitoring/node-exporter/node-exporter-ds.yml
+      - monitoring/kube-state-metrics/kube-state-metrics-sa.yml
+      - monitoring/kube-state-metrics/kube-state-metrics-rbac.yml
+      - monitoring/kube-state-metrics/kube-state-metrics-svc.yml
+      - monitoring/kube-state-metrics/kube-state-metrics-dp.yml
+      - monitoring/alertmanater/alertmanager-main-sa.yml
+      - monitoring/alertmanater/alertmanager-main-secret.yml
+      - monitoring/alertmanater/alertmanager-main-svc.yml
+      - monitoring/alertmanater/alertmanager-main.yml
+      - monitoring/prometheus/prometheus-sa.yml
+      - monitoring/prometheus/prometheus-rbac.yml
+      - monitoring/prometheus/prometheus-svc.yml
+      - monitoring/prometheus/prometheus-main.yml
+      - monitoring/service-discovery/kube-controller-manager-svc.yml
+      - monitoring/service-discovery/kube-scheduler-svc.yml
+      - monitoring/service-discovery/kube-dns-svc.yml
+      - monitoring/servicemonitor/alertmanager-sm.yml
+      - monitoring/servicemonitor/coredns-sm.yml
+      - monitoring/servicemonitor/kube-apiserver-sm.yml
+      - monitoring/servicemonitor/kube-controller-manager-sm.yml
+      - monitoring/servicemonitor/kube-scheduler-sm.yml
+      - monitoring/servicemonitor/kubelet-sm.yml
+      - monitoring/servicemonitor/kubestate-metrics-sm.yml
+      - monitoring/servicemonitor/node-exporter-sm.yml
+      - monitoring/servicemonitor/prometheus-operator-sm.yml
+      - monitoring/servicemonitor/prometheus-sm.yml
+      - monitoring/grafana/grafana-sa.yml
+      - monitoring/grafana/grafana-source.yml
+      - monitoring/grafana/grafana-datasources.yml
+      - monitoring/grafana/grafana-admin-secret.yml
+      - monitoring/grafana/grafana-svc.yml
+      - monitoring/grafana/grafana-dp.yml

@@ -1,0 +1,89 @@
+# 文件夹
+- name: "Ensure {{ addon.name }} addons directory exists"
+  when: addon is defined
+  file: path="{{ kubernetes_path }}/ExtraAddons/{{ item }}" state=directory
+  with_items: "{{ addon.dirs }}"
+
+# 依赖的文件
+- name: "Copy {{ addon.name }} addon template dependencies"
+  when: addon is defined and addon.dependencies is defined
+  template:
+    src: "{{ item.1 }}.j2"
+    dest: "{{ kubernetes_path }}/ExtraAddons//{{ item.1 }}"
+  with_subelements:
+    - "{{ addon.dependencies }}"
+    - files
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: copy_addon_deps
+
+# 创建依赖
+- name: "Apply {{ addon.name }} addon dependencies"
+  when: addon is defined and addon.dependencies is defined and copy_addon_deps
+  command: |
+    {{ kubectl_path }}/kubectl  \
+      apply -f {{ kubernetes_path }}/ExtraAddons/{{ item.1 }}
+  with_subelements:
+    - "{{ addon.dependencies }}"
+    - files
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: apply_addon_deps
+  until: apply_addon_deps.rc == 0
+  retries: 10
+  delay: 2
+
+- name: "Check {{ addon.name }} addon dependencies status"
+  when: addon is defined and addon.dependencies is defined and apply_addon_deps
+  shell: |
+    {% if item.kind == 'ns' %}
+    {{ kubectl_path }}/kubectl   \
+       get {{ item.kind }} --no-headers | \
+       grep {{ item.name }} | awk '{ print $2}' | uniq
+    {% else %}
+    {{ kubectl_path }}/kubectl -n {{ item.namespace }}  \
+      get {{ item.kind }} --no-headers | \
+      grep {{ item.name }} | awk '{ print $3}' | uniq
+    {% endif %}
+  with_items: "{{ addon.dependencies }}"
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: check_addon_deps
+  until: check_addon_deps.stdout == 'Running' or check_addon_deps.stdout == 'Active'
+  retries: 10
+  delay: 10
+
+# copy addon.files
+- name: "Copy {{ addon.name }} addon files"
+  when: addon is defined and addon.files is defined
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubernetes_path }}/ExtraAddons/{{ item }}"
+  with_items: "{{ addon.files }}"
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: copy_addon_files
+
+# copy the  templates
+- name: "Copy {{ addon.name }} addon template files"
+  when: addon is defined
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ kubernetes_path }}/ExtraAddons/{{ item }}"
+  with_items: "{{ addon.templates }}"
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: copy_addon_templates
+
+- name: "Apply {{ addon.name }} addon files"
+  when: addon is defined and copy_addon_templates
+  command: |
+    {{ kubectl_path }}/kubectl  \
+      apply -f {{ kubernetes_path }}/ExtraAddons/{{ item }}
+  with_items: "{{ addon.dirs  }}"
+  delegate_to: "{{ groups['Master'][0] }}"
+  run_once: true
+  register: apply_addon
+  until: apply_addon.rc == 0
+  retries: 10
+  delay: 2

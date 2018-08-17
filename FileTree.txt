@@ -1,0 +1,111 @@
+.
+├── addNode.yml
+├── ansible.cfg
+├── AutoScp
+├── AutoSsh
+├── env_set.sh
+├── FileTree.txt
+├── group_vars
+│   └── all.yml
+├── hosts
+├── Image.sh
+├── README.md
+├── roles
+│   ├── addNode
+│   │   ├── files
+│   │   │   └── cni-plugins-amd64-v0.7.1.tgz
+│   │   ├── tasks
+│   │   │   ├── addNode.yml
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── 10-kubelet.conf.j2
+│   │       └── kubelet.service.j2
+│   ├── deployMaster
+│   │   ├── tasks
+│   │   │   ├── all.yml
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── 10-kubelet.conf.j2
+│   │       ├── audit-policy.yml.j2
+│   │       ├── calico-rc.j2
+│   │       ├── encryption.yml.j2
+│   │       ├── etcd.config.yml.j2
+│   │       ├── etcd.yml.j2
+│   │       ├── haproxy.cfg.j2
+│   │       ├── haproxy.yml.j2
+│   │       ├── keepalived.yml.j2
+│   │       ├── kube-apiserver.yml.j2
+│   │       ├── kube-controller-manager.yml.j2
+│   │       ├── kubelet.service.j2
+│   │       └── kube-scheduler.yml.j2
+│   ├── etcd-ca
+│   │   ├── files
+│   │   │   ├── ca-config.json
+│   │   │   ├── etcd-ca-csr.json
+│   │   │   └── etcd-csr.json
+│   │   └── tasks
+│   │       ├── copy_to_otherMaster.yml
+│   │       ├── etcd_ca.yml
+│   │       └── main.yml
+│   ├── Kubernetes-ca
+│   │   ├── files
+│   │   │   ├── admin-csr.json
+│   │   │   ├── apiserver-csr.json
+│   │   │   ├── ca-config.json
+│   │   │   ├── ca-csr.json
+│   │   │   ├── front-proxy-ca-csr.json
+│   │   │   ├── front-proxy-client-csr.json
+│   │   │   ├── kubelet-csr.json
+│   │   │   ├── manager-csr.json
+│   │   │   └── scheduler-csr.json
+│   │   └── tasks
+│   │       ├── ca.yml
+│   │       └── main.yml
+│   ├── KubernetesCoreAddons
+│   │   ├── tasks
+│   │   │   ├── KubernetesCoreAddons.yml
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── coredns.yml.conf.j2
+│   │       ├── kube-flannel.yml.conf.j2
+│   │       ├── kube-proxy.yml.conf.j2
+│   │       └── metrics-server.yml.conf.j2
+│   ├── KubernetesExtraAddons
+│   │   ├── files
+│   │   │   ├── getToken.sh
+│   │   │   └── openApi-ClusterRoleBinding.yml.conf
+│   │   ├── tasks
+│   │   │   ├── Dashboard.yml
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       └── kubernetes-dashboard.yaml.conf.j2
+│   ├── scp
+│   │   ├── files
+│   │   │   ├── cfssl
+│   │   │   ├── cfssljson_linux-amd64
+│   │   │   ├── cfssl_linux-amd64
+│   │   │   ├── cni-plugins-amd64-v0.7.1.tgz
+│   │   │   ├── kubectl
+│   │   │   └── kubelet
+│   │   └── tasks
+│   │       ├── allscp.yml
+│   │       ├── cfssl.yml
+│   │       └── main.yml
+│   └── tls
+│       ├── files
+│       │   ├── apiserver-to-kubelet-rbac.yml.conf
+│       │   └── kubelet-bootstrap-rbac.yml.conf
+│       ├── tasks
+│       │   ├── main.yml
+│       │   └── TLS.yml
+│       └── templates
+│           └── bootstrap-token-Secret.yml.conf.j2
+├── step1.yml
+├── step2.yml
+├── step3.yml
+├── step4.yml
+├── step5.yml
+├── step6.yml
+└── step7.yml
+
+29 directories, 79 files

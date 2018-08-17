@@ -1,0 +1,8 @@
+---
+- hosts: Master
+  roles:
+    - { role: ExtraAddons,   addon: "{{ addons.dashboard }}" }
+    - { role: ExtraAddons,   addon: "{{ addons.ingress_nginx }}" }
+    - { role: ExtraAddons,   addon: "{{ addons.external_dns }}" }
+#    - { role: ExtraAddons,   addon: "{{ addons.logging }}" }
+#    - { role: ExtraAddons,   addon: "{{ addons.monitoring }}" }
