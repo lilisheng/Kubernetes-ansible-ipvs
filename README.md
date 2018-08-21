@@ -133,8 +133,7 @@ ansible all -m copy -a 'src=/etc/hosts dest=/etc/hosts'
  * step3是tls
  * step4是node
  * step5是kub-proxy,coredns,flannel,metrics此时集群就可以使用
- * 勇者可以使用BaseCluster.yml,包含了以上1-5,建议提前把etcd的镜像拉取了,因为是quay.io的镜像,网络组件用calico的话同理
- * step6里是`Dashboard`和`Ingress-nginx`,ingress默认注释的`roles/KubernetesExtraAddons/tasks/main.yml`里取消两行注释即可开启它
+ * 勇者可以使用BaseCluster.yml,包含了以上1-5,建议提前把etcd的镜像拉取了,因为是quay.io的镜像拉取会非常慢,网络组件用calico的话同理
  1. ansible-playbook  step1.yml
  
  
