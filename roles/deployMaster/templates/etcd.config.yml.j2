@@ -10,8 +10,8 @@ listen-client-urls: 'https://0.0.0.0:{{ ETCD_PORT }}'
 max-snapshots: 5
 max-wals: 5
 cors:
-initial-advertise-peer-urls: 'https://{{ ansible_default_ipv4.address }}:{{ ETCD_PEER_PORT }}'
-advertise-client-urls: 'https://{{ ansible_default_ipv4.address }}:{{ ETCD_PORT }}'
+initial-advertise-peer-urls: 'https://{{ inventory_hostname }}:{{ ETCD_PEER_PORT }}'
+advertise-client-urls: 'https://{{ inventory_hostname }}:{{ ETCD_PORT }}'
 discovery:
 discovery-fallback: 'proxy'
 discovery-proxy:
