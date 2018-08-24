@@ -26,7 +26,7 @@ spec:
       
       - --service-cluster-ip-range={{ ServiceClusterIPRange }}
       - --service-node-port-range={{ ServiceNodePortRange }}
-      - --etcd-servers={% for host in groups['Master'] %}https://{{ hostvars[host].ansible_default_ipv4.address }}:{{ ETCD_PORT }}{% if not loop.last %},{% endif %}{% endfor %}
+      - --etcd-servers={% for host in groups['Master'] %}https://{{ hostvars[host].inventory_hostname }}:{{ ETCD_PORT }}{% if not loop.last %},{% endif %}{% endfor %}
 
       - --etcd-cafile={{ etcd_ssl_path }}/{{ etcd_ca }}.pem
       - --etcd-certfile={{ etcd_ssl_path }}/etcd.pem
