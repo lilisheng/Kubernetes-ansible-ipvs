@@ -38,7 +38,3 @@
   args:
     chdir: "{{ kubernetes_path }}"
 
-
-
-
-

@@ -1,3 +1,5 @@
 - include: TLS.yml
-  when: inventory_hostname == 'localhost' # EDIT
+#  when: inventory_hostname == 'localhost' # EDIT
+  delegate_to: "{{ groups['master1'][0] }}"
+  run_once: true
 

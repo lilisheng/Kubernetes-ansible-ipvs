@@ -88,7 +88,7 @@ https://storage.googleapis.com/kubernetes-release/release/v1.11.1/bin/linux/amd6
 
 **2 配置脚本属性**
 
- * 按照自己情况修改当前目录ansible的`hosts`文件里分组成员文件,填写otherMaster和Node下面填写各成员的ip地址,local分组的分组名别动,它下面的ip改成自己的master1和其他机器通信的IP(这样能支持多网卡下部署)
+ * 按照自己情况修改当前目录ansible的`hosts`文件里分组成员文件,填写otherMaster和Node下面填写各成员的ip地址,master1分组的分组名别动,它下面的ip改成自己的master1和其他机器通信的IP(这样能支持多网卡下部署)
  * 单台master的话把`hosts`文件里`Master`分组下面的otherMaster注释了,然后注释掉整个otherMaster分组和成员
  * 单台master的话把`group_vars/all.yml`里的`single_etcd_version`为`v3.1.9`,不建议修改,不然报错,参照下面issue
  
@@ -107,10 +107,29 @@ https://storage.googleapis.com/kubernetes-release/release/v1.11.1/bin/linux/amd6
  8. `INTERFACE_NAME`为各机器的ip所在网卡名字Centos可能是`ens33`,看情况修改
  9. 其余的参数按需修改,不熟悉最好别乱改
 
-**3 注入变量**
+**3 测试ansible连通性**
 
- 1. 当前master1和其他主机通信的ip赋值给`Master1_IP`,例如我的master1是192.128.126.111,即`Master1_IP=192.168.126.111`
- 2. 执行`find . -type f -name main.yml -exec sed -ri "/# EDIT/s#'.*'#'${Master1_IP}'#" {} \; `
+以下类似输出后即可继续往下看
+```bash
+ansible all -m ping
+192.168.126.112 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+192.168.126.113 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+192.168.126.111 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+192.168.126.114 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+```
+
 ----------
 
 **4 手动分发hosts文件**
